@@ -115,41 +115,84 @@ document.addEventListener("click", (e) => {
 
 // ========== MODAL CON DATOS DEL POKÉMON ==========
 export async function openPokemonModal(name) {
-  const pokemon = state.allPokemon.find(p => p.name === name)
-    || await fetchPokemonDetails(`https://pokeapi.co/api/v2/pokemon/${name}`, name);
+  const pokemon =
+    state.allPokemon.find((p) => p.name === name) ||
+    (await fetchPokemonDetails(
+      `https://pokeapi.co/api/v2/pokemon/${name}`,
+      name
+    ));
 
-  if (!state.allPokemon.some(p => p.name === pokemon.name)) {
+  if (!state.allPokemon.some((p) => p.name === pokemon.name)) {
     state.allPokemon.push(pokemon);
   }
 
-  modalTitle.textContent = `${pokemon.name} #${pokemon.id?.toString().padStart(3, "0") || "???"}`;
+  modalTitle.textContent = `${pokemon.name} #${
+    pokemon.id?.toString().padStart(3, "0") || "???"
+  }`;
 
-  const types = pokemon.types.map(
-    (t) => `<span class="badge type-${t.type.name} me-1">${t.type.name}</span>`
-  ).join("");
+  const types = pokemon.types
+    .map(
+      (t) =>
+        `<span class="badge type-${t.type.name} me-1">${t.type.name}</span>`
+    )
+    .join("");
 
-  const abilities = pokemon.abilities?.map((a) => a.ability.name).join(", ") || "Desconocidas";
+  const abilities =
+    pokemon.abilities?.map((a) => a.ability.name).join(", ") || "Desconocidas";
 
-  const stats = pokemon.stats?.map((s) => {
-    const name = s.stat.name;
-    const value = s.base_stat;
-    const percentage = Math.min(100, (value / 150) * 100);
-    return `
-      <div class="d-flex align-items-center justify-content-between stat-line mb-2" style="width: 100%;">
-        <span class="text-capitalize fw-semibold text-end text-nowrap" style="width: 130px;">${name}</span>
-        <div class="flex-grow-1 mx-2" style="background-color: #eee; height: 10px; border-radius: 5px; overflow: hidden;">
-          <div class="bg-success" style="width: ${percentage}%; height: 100%;"></div>
+  const stats = pokemon.stats
+    ?.map((s) => {
+      const name = s.stat.name;
+      const value = s.base_stat;
+      const percentage = Math.min(100, (value / 150) * 100);
+      return `
+        <div class="d-flex align-items-center justify-content-between stat-line mb-2" style="width: 100%;">
+          <span class="text-capitalize fw-semibold text-end text-nowrap" style="width: 130px;">${name}</span>
+          <div class="flex-grow-1 mx-2" style="background-color: #eee; height: 10px; border-radius: 5px; overflow: hidden;">
+            <div class="bg-success" style="width: ${percentage}%; height: 100%;"></div>
+          </div>
+          <span class="fw-bold text-end" style="width: 30px;">${value}</span>
         </div>
-        <span class="fw-bold text-end" style="width: 30px;">${value}</span>
+      `;
+    })
+    .join("");
+
+  const statsMobile = pokemon.stats
+    ?.map((s) => {
+      const name = s.stat.name;
+      const value = s.base_stat;
+
+      const colorClass =
+        {
+          hp: "stat-color-hp",
+          attack: "stat-color-attack",
+          defense: "stat-color-defense",
+          "special-attack": "stat-color-sp-attack",
+          "special-defense": "stat-color-sp-defense",
+          speed: "stat-color-speed",
+        }[name] || "bg-secondary";
+
+      // Calculamos porcentaje para ancho
+      const widthPercentage = Math.min(100, (value / 150) * 100);
+
+      return `
+      <div class="stat-bar-container mb-2">
+        <div class="stat-name text-capitalize">${name.replace("-", " ")}</div>
+        <div class="stat-bar">
+          <div class="stat-fill ${colorClass}" style="width: ${widthPercentage}%;">
+            ${value}
+          </div>
+        </div>
       </div>
     `;
-  }).join("");
+    })
+    .join("");
 
   // === Línea evolutiva ===
   let evolutionHTML = "";
   try {
     const chain = await fetchEvolutionChain(pokemon.name);
-    const isEeveeChain = chain.some(p => p.name === "eevee");
+    const isEeveeChain = chain.some((p) => p.name === "eevee");
 
     if (chain.length > 1) {
       if (isEeveeChain) {
@@ -159,19 +202,21 @@ export async function openPokemonModal(name) {
         );
 
         const evolutions = await Promise.all(
-          chain.filter(p => p.name !== "eevee").map(async evo => {
-            const data = await fetchPokemonDetails(
-              `https://pokeapi.co/api/v2/pokemon/${evo.name}`,
-              evo.name
-            );
-            return `
+          chain
+            .filter((p) => p.name !== "eevee")
+            .map(async (evo) => {
+              const data = await fetchPokemonDetails(
+                `https://pokeapi.co/api/v2/pokemon/${evo.name}`,
+                evo.name
+              );
+              return `
               <div class="d-flex align-items-center mb-3">
                 <div class="me-2" style="font-size: 1.5rem; color: black;">→</div>
                 <img src="${data.sprites.front_default}" alt="${evo.name}" style="width: 60px; cursor: pointer;" data-evo-name="${evo.name}">
                 <span class="text-capitalize ms-2">${evo.name}</span>
               </div>
             `;
-          })
+            })
         );
 
         evolutionHTML = `
@@ -179,7 +224,9 @@ export async function openPokemonModal(name) {
             <strong>Línea evolutiva</strong>
             <div class="d-flex justify-content-center align-items-center mt-3">
               <div class="text-center me-4">
-                <img src="${eeveeData.sprites.front_default}" alt="eevee" style="width: 80px; cursor: pointer;" data-evo-name="eevee">
+                <img src="${
+                  eeveeData.sprites.front_default
+                }" alt="eevee" style="width: 80px; cursor: pointer;" data-evo-name="eevee">
                 <div class="text-capitalize mt-1">eevee</div>
               </div>
               <div class="d-flex flex-column align-items-start">
@@ -211,9 +258,11 @@ export async function openPokemonModal(name) {
             const arrow = `
               <div class="d-flex flex-column align-items-center mx-2">
                 <div style="font-size: 2rem; font-weight: bold; color: black;">→</div>
-                ${next.min_level
-                  ? `<small class="text-muted">Lvl ${next.min_level}</small>`
-                  : `<small class="invisible">Lvl</small>`}
+                ${
+                  next.min_level
+                    ? `<small class="text-muted">Lvl ${next.min_level}</small>`
+                    : `<small class="invisible">Lvl</small>`
+                }
               </div>
             `;
             evoParts.push(arrow);
@@ -235,22 +284,28 @@ export async function openPokemonModal(name) {
   }
 
   modalBody.innerHTML = `
-    <div class="modal-scroll-content" style="max-height: 70vh; overflow-y: auto;">
-      <div class="d-flex flex-column align-items-center pb-3">
-        <div class="rounded-circle bg-light d-flex align-items-center justify-content-center mb-3" style="width: 160px; height: 160px;">
-          <img src="${pokemon.sprites.front_default}" alt="${pokemon.name}" style="width: 200px; height: 200px;">
-        </div>
-        <h5 class="text-capitalize">${pokemon.name}</h5>
-        <div class="mb-2">${types}</div>
-        <p><strong>Habilidades:</strong> ${abilities}</p>
-        <div class="w-75 mb-3">
-          <strong>Estadísticas:</strong>
+  <div class="modal-scroll-content" style="max-height: 70vh; overflow-y: auto;">
+    <div class="d-flex flex-column align-items-center pb-3">
+      <div class="rounded-circle bg-light d-flex align-items-center justify-content-center mb-3" style="width: 160px; height: 160px;">
+        <img src="${pokemon.sprites.front_default}" alt="${pokemon.name}" style="width: 200px; height: 200px;">
+      </div>
+      <h5 class="text-capitalize">${pokemon.name}</h5>
+      <div class="mb-2">${types}</div>
+      <p><strong>Habilidades:</strong> ${abilities}</p>
+      <div class="w-75 mb-3">
+        <div class="stats-desktop">
           ${stats}
         </div>
-        ${evolutionHTML}
+        <div class="d-flex justify-content-center">
+          <div class="stats-mobile d-none">
+            ${statsMobile}
+          </div> 
+        </div>
       </div>
+      ${evolutionHTML}
     </div>
-  `;
+  </div>
+`;
 
   modal.show();
 }
@@ -260,7 +315,8 @@ document.addEventListener("click", async (e) => {
   if (
     e.target.classList.contains("favorite-icon") ||
     e.target.closest("[data-type]")
-  ) return;
+  )
+    return;
 
   const card = e.target.closest(".card");
   if (!card) return;

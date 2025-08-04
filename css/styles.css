@@ -13,7 +13,7 @@
 }
 
 body {
-  font-family: 'Roboto', sans-serif;
+  font-family: "Roboto", sans-serif;
   background-color: var(--bg-color);
   color: var(--text-color);
   min-height: 100vh;
@@ -22,7 +22,7 @@ body {
 header {
   background-color: var(--primary-color);
   color: white;
-  padding: 2.5rem 2rem; 
+  padding: 2.5rem 2rem;
   text-align: center;
   font-size: 2rem;
   font-weight: bold;
@@ -48,7 +48,7 @@ nav a:hover {
 }
 
 nav a.active-link {
-  background-color: #d6d6d6; 
+  background-color: #d6d6d6;
   border-radius: 8px;
   padding: 0.4rem 0.8rem;
   transition: background-color 0.3s ease;
@@ -88,25 +88,78 @@ nav a.active-link {
 }
 
 /* Colores para los tipos */
-.type-bug { background-color: #A6B91A; color: white; }
-.type-dark { background-color: #705746; color: white; }
-.type-dragon { background-color: #6F35FC; color: white; }
-.type-electric { background-color: #F7D02C; color: white; }
-.type-fairy { background-color: #D685AD; color: white; }
-.type-fighting { background-color: #C22E28; color: white; }
-.type-fire { background-color: #EE8130; color: white; }
-.type-flying { background-color: #A98FF3; color: white; }
-.type-ghost { background-color: #735797; color: white; }
-.type-grass { background-color: #7AC74C; color: white; }
-.type-ground { background-color: #E2BF65; color: white; }
-.type-ice { background-color: #96D9D6; color: white; }
-.type-normal { background-color: #A8A77A; color: white; }
-.type-poison { background-color: #A33EA1; color: white; }
-.type-psychic { background-color: #F95587; color: white; }
-.type-rock { background-color: #B6A136; color: white; }
-.type-steel { background-color: #B7B7CE; color: white; }
-.type-water { background-color: #6390F0; color: white; }
-
+.type-bug {
+  background-color: #a6b91a;
+  color: white;
+}
+.type-dark {
+  background-color: #705746;
+  color: white;
+}
+.type-dragon {
+  background-color: #6f35fc;
+  color: white;
+}
+.type-electric {
+  background-color: #f7d02c;
+  color: white;
+}
+.type-fairy {
+  background-color: #d685ad;
+  color: white;
+}
+.type-fighting {
+  background-color: #c22e28;
+  color: white;
+}
+.type-fire {
+  background-color: #ee8130;
+  color: white;
+}
+.type-flying {
+  background-color: #a98ff3;
+  color: white;
+}
+.type-ghost {
+  background-color: #735797;
+  color: white;
+}
+.type-grass {
+  background-color: #7ac74c;
+  color: white;
+}
+.type-ground {
+  background-color: #e2bf65;
+  color: white;
+}
+.type-ice {
+  background-color: #96d9d6;
+  color: white;
+}
+.type-normal {
+  background-color: #a8a77a;
+  color: white;
+}
+.type-poison {
+  background-color: #a33ea1;
+  color: white;
+}
+.type-psychic {
+  background-color: #f95587;
+  color: white;
+}
+.type-rock {
+  background-color: #b6a136;
+  color: white;
+}
+.type-steel {
+  background-color: #b7b7ce;
+  color: white;
+}
+.type-water {
+  background-color: #6390f0;
+  color: white;
+}
 
 .badge {
   transition: all 0.2s ease;
@@ -121,13 +174,13 @@ nav a.active-link {
 }
 
 #generation-filters .badge {
-  background-color: #f0f0f0; 
-  color: #000;              
+  background-color: #f0f0f0;
+  color: #000;
 }
 
 .badge[data-type]:hover {
   transform: scale(1.05);
-  box-shadow: 0 0 5px rgba(0,0,0,0.2);
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
   transition: transform 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
 }
 
@@ -142,7 +195,7 @@ nav a.active-link {
 
 .favorite-icon:hover {
   transform: scale(1.2);
-  color: gold !important; /* Color resaltado en hover */
+  color: gold !important;
 }
 
 /* Scroll to top button */
@@ -172,9 +225,15 @@ nav a.active-link {
 }
 
 @keyframes gradientMove {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
 }
 
 .logo-img {
@@ -200,7 +259,7 @@ nav a.active-link {
 }
 
 .stat-name {
-  width: 130px; 
+  width: 130px;
   font-weight: 600;
   text-align: right;
   margin-right: 10px;
@@ -234,4 +293,79 @@ nav a.active-link {
 }
 .pokemon-evolution img:hover {
   transform: scale(1.1);
+}
+
+/* Estilos para pantallas moviles */
+.stats-mobile {
+  display: none;
+}
+
+@media (max-width: 576px) {
+  .stats-desktop {
+    display: none !important;
+  }
+
+  .stats-mobile {
+    display: block !important;
+    max-width: 350px;
+    width: 100%;
+  }
+
+  .stat-bar-container {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    margin-bottom: 8px;
+  }
+
+  .stat-name {
+    width: 120px;
+    text-align: right;
+    margin-right: 12px;
+    font-weight: 600;
+  }
+
+  .stat-bar {
+    flex-grow: 1;
+    background-color: #ddd;
+    height: 14px;
+    border-radius: 6px;
+    overflow: hidden;
+  }
+
+  .stat-fill {
+    height: 100%;
+    border-radius: 6px;
+    color: white;
+    font-weight: bold;
+    font-size: 0.8rem;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    padding-right: 6px;
+    white-space: nowrap;
+  }
+
+  .stat-color-hp {
+    background-color: #a552cc;
+  }
+  .stat-color-attack {
+    background-color: #d32f2f;
+  }
+  .stat-color-defense {
+    background-color: #8d6e63;
+  }
+  .stat-color-sp-attack {
+    background-color: #4caf50;
+  }
+  .stat-color-sp-defense {
+    background-color: #4dd0e1;
+  }
+  .stat-color-speed {
+    background-color: #fbc02d;
+  }
+
+  .stat-bar {
+    background-color: #ddd; /* gris claro para el fondo de la barra */
+  }
 }

@@ -33,7 +33,7 @@ Una aplicación web que consume la [PokéAPI](https://pokeapi.co) para mostrar i
 │   ├── events.js               # Manejo de eventos (clics, scroll, filtros, favoritos)
 │   ├── constants.js            # Constantes reutilizables (tipos, límites, etc.)
 │   └── filters.js              # Lógica de filtrado por tipo y generación
-└── assets/                     # Imágenes 
+└── assets/                     # Imágenes
 ```
 
 ---
@@ -68,4 +68,4 @@ La información proviene de PokéAPI.
 
 ## 🧑‍💻 Autor
 
-Mateo Razquin -> 🔗 Portfolio Web
+Mateo Razquin

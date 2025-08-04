@@ -1,80 +1,4 @@
-// const CACHE_KEY = 'pokemonCache';
-
-// /* ==============
-//         CACHE
-//    ============== */ 
-
-// const getCachedPokemon = () => {
-//   return JSON.parse(localStorage.getItem(CACHE_KEY)) || {};
-// };
-
-// const saveToCache = (name, data) => {
-//   const cache = getCachedPokemon();
-
-//   cache[name] = {
-//     name: data.name,
-//     sprites: {
-//       front_default: data.sprites.front_default,
-//     },
-//     types: data.types.map(t => ({
-//       type: { name: t.type.name },
-//     })),
-//   };
-
-//   localStorage.setItem(CACHE_KEY, JSON.stringify(cache));
-// };
-
-// /* ==============
-//         API
-//    ============== */ 
-
-// /**
-//  * Obtiene una página de Pokémon con nombres y URLs.
-//  * @param {number} offset 
-//  * @param {number} limit 
-//  * @returns {Promise<Array<{ name: string, url: string }>>}
-//  */
-// export const fetchPokemonPage = async (offset = 0, limit = 20) => {
-//   const res = await fetch(`https://pokeapi.co/api/v2/pokemon?offset=${offset}&limit=${limit}`);
-//   const data = await res.json();
-//   return data.results;
-// };
-
-// /**
-//  * Obtiene los detalles de un Pokémon por su URL o nombre.
-//  * @param {string} url 
-//  * @param {string} name 
-//  * @returns {Promise<Object>} Pokémon con nombre, sprite y tipos
-//  */
-// export const fetchPokemonDetails = async (url, name) => {
-//   const cache = getCachedPokemon();
-//   if (cache[name]) return cache[name];
-
-//   const res = await fetch(url);
-//   const data = await res.json();
-//   saveToCache(name, data);
-
-//   return {
-//     name: data.name,
-//     sprites: {
-//       front_default: data.sprites.front_default,
-//     },
-//     types: data.types.map(t => ({ type: { name: t.type.name } })),
-//   };
-// };
-
-// /**
-//  * Obtiene los nombres de Pokémon de una generación específica.
-//  * @param {string|number} generationId 
-//  * @returns {Promise<string[]>}
-//  */
-// export const fetchGenerationPokemonNames = async (generationId) => {
-//   const res = await fetch(`https://pokeapi.co/api/v2/generation/${generationId}`);
-//   const data = await res.json();
-//   return data.pokemon_species.map(p => p.name.toLowerCase());
-// };
-
-const CACHE_KEY = 'pokemonCache';
+const CACHE_KEY = "pokemonCache";
 
 /* ==============
        CACHE
@@ -93,13 +17,13 @@ const saveToCache = (name, data) => {
     sprites: {
       front_default: data.sprites.front_default,
     },
-    types: data.types.map(t => ({
+    types: data.types.map((t) => ({
       type: { name: t.type.name },
     })),
-    abilities: data.abilities.map(a => ({
+    abilities: data.abilities.map((a) => ({
       ability: { name: a.ability.name },
     })),
-    stats: data.stats.map(s => ({
+    stats: data.stats.map((s) => ({
       base_stat: s.base_stat,
       stat: { name: s.stat.name },
     })),
@@ -114,20 +38,22 @@ const saveToCache = (name, data) => {
 
 /**
  * Obtiene una página de Pokémon con nombres y URLs.
- * @param {number} offset 
- * @param {number} limit 
+ * @param {number} offset
+ * @param {number} limit
  * @returns {Promise<Array<{ name: string, url: string }>>}
  */
 export const fetchPokemonPage = async (offset = 0, limit = 20) => {
-  const res = await fetch(`https://pokeapi.co/api/v2/pokemon?offset=${offset}&limit=${limit}`);
+  const res = await fetch(
+    `https://pokeapi.co/api/v2/pokemon?offset=${offset}&limit=${limit}`
+  );
   const data = await res.json();
   return data.results;
 };
 
 /**
  * Obtiene los detalles de un Pokémon por su URL o nombre.
- * @param {string} url 
- * @param {string} name 
+ * @param {string} url
+ * @param {string} name
  * @returns {Promise<Object>} Pokémon con datos básicos + habilidades + stats
  */
 export const fetchPokemonDetails = async (url, name) => {
@@ -148,13 +74,15 @@ export const fetchPokemonDetails = async (url, name) => {
 
 /**
  * Obtiene los nombres de Pokémon de una generación específica.
- * @param {string|number} generationId 
+ * @param {string|number} generationId
  * @returns {Promise<string[]>}
  */
 export const fetchGenerationPokemonNames = async (generationId) => {
-  const res = await fetch(`https://pokeapi.co/api/v2/generation/${generationId}`);
+  const res = await fetch(
+    `https://pokeapi.co/api/v2/generation/${generationId}`
+  );
   const data = await res.json();
-  return data.pokemon_species.map(p => p.name.toLowerCase());
+  return data.pokemon_species.map((p) => p.name.toLowerCase());
 };
 
 /**
@@ -165,7 +93,9 @@ export const fetchGenerationPokemonNames = async (generationId) => {
 export const fetchEvolutionChain = async (name) => {
   try {
     // Obtener especie
-    const speciesRes = await fetch(`https://pokeapi.co/api/v2/pokemon-species/${name}`);
+    const speciesRes = await fetch(
+      `https://pokeapi.co/api/v2/pokemon-species/${name}`
+    );
     const speciesData = await speciesRes.json();
 
     // Obtener URL de la cadena evolutiva
@@ -177,7 +107,7 @@ export const fetchEvolutionChain = async (name) => {
 
     const traverseChain = (node, level = null) => {
       evolutionLine.push({ name: node.species.name, min_level: level });
-      node.evolves_to.forEach(evo => {
+      node.evolves_to.forEach((evo) => {
         const details = evo.evolution_details[0];
         traverseChain(evo, details?.min_level || null);
       });
@@ -187,7 +117,7 @@ export const fetchEvolutionChain = async (name) => {
 
     return evolutionLine;
   } catch (err) {
-    console.error('❌ Error al obtener la línea evolutiva:', err);
+    console.error("❌ Error al obtener la línea evolutiva:", err);
     return [];
   }
 };
