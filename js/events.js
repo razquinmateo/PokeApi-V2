@@ -1,4 +1,3 @@
-// ========== IMPORTS ==========
 import {
   searchInput,
   applyFiltersBtn,
@@ -27,7 +26,6 @@ searchInput.addEventListener("input", (e) => {
 });
 
 applyFiltersBtn.addEventListener("click", async () => {
-  // Aplicar los filtros seleccionados
   state.activeTypes.clear();
   state.pendingTypes.forEach((t) => state.activeTypes.add(t));
   state.activeGeneration = state.pendingGeneration;
@@ -35,7 +33,6 @@ applyFiltersBtn.addEventListener("click", async () => {
 });
 
 clearFiltersBtn.addEventListener("click", async () => {
-  // Limpiar todos los filtros activos y pendientes
   state.pendingTypes.clear();
   state.pendingGeneration = "";
   state.activeTypes.clear();
@@ -43,13 +40,11 @@ clearFiltersBtn.addEventListener("click", async () => {
 
   await applyFilters();
 
-  // Limpiar visualmente los badges
   const allBadges = document.querySelectorAll(
     "#type-filters .badge, #generation-filters .badge"
   );
   allBadges.forEach((b) => b.classList.remove("active-type"));
 
-  // Cerrar el modal si está abierto
   const modalInstance = bootstrap.Modal.getInstance(filterModal);
   if (modalInstance) modalInstance.hide();
 });
@@ -59,7 +54,6 @@ filterModal.addEventListener("show.bs.modal", () => {
   state.pendingTypes = new Set(state.activeTypes);
   state.pendingGeneration = state.activeGeneration;
 
-  // Marcar badges activos visualmente
   const typeBadges = typeFiltersContainer.querySelectorAll(".badge");
   typeBadges.forEach((badge) => {
     const type = badge.textContent;
@@ -95,17 +89,14 @@ document.addEventListener("click", (e) => {
 
   const name = e.target.dataset.name;
 
-  // Toggle favorito
   if (state.favorites.has(name)) {
     state.favorites.delete(name);
   } else {
     state.favorites.add(name);
   }
 
-  // Guardar en localStorage
   localStorage.setItem("favorites", JSON.stringify([...state.favorites]));
 
-  // Renderizar según vista actual
   if (state.showingFavorites) {
     renderFavorites();
   } else {
@@ -172,7 +163,6 @@ export async function openPokemonModal(name) {
           speed: "stat-color-speed",
         }[name] || "bg-secondary";
 
-      // Calculamos porcentaje para ancho
       const widthPercentage = Math.min(100, (value / 150) * 100);
 
       return `
@@ -342,14 +332,13 @@ modalBody.addEventListener("click", (e) => {
 });
 
 // ========== NAVEGACIÓN ENTRE VISTAS ==========
-pokemonLink.classList.add("active-link"); // Marcar por defecto la vista de la dex
+pokemonLink.classList.add("active-link");
 
 pokemonLink.addEventListener("click", (e) => {
   e.preventDefault();
   state.showingFavorites = false;
   renderVisiblePokemon();
 
-  // Cambiar estilos nav
   favoritesLink.classList.remove("active-link");
   pokemonLink.classList.add("active-link");
 });
@@ -359,7 +348,6 @@ favoritesLink.addEventListener("click", (e) => {
   state.showingFavorites = true;
   renderFavorites();
 
-  // Cambiar estilos nav
   pokemonLink.classList.remove("active-link");
   favoritesLink.classList.add("active-link");
 });

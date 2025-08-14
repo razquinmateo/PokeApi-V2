@@ -1,6 +1,3 @@
-/*================== 
-Todas las constantes
-====================*/
 export const container = document.getElementById("pokemon-container");
 export const searchInput = document.getElementById("search-input");
 export const typeFiltersContainer = document.getElementById("type-filters");

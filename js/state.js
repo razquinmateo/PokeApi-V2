@@ -1,4 +1,3 @@
-// ========== IMPORTS ==========
 import { fetchPokemonPage, fetchPokemonDetails } from "./api.js";
 import { PAGE_LIMIT, TOTAL_POKEMON, BATCH_STEP } from "./constants.js";
 import { renderVisiblePokemon } from "./render.js";
@@ -38,7 +37,7 @@ export const loadPokemonBatch = async () => {
   state.allPokemon = [...state.allPokemon, ...details];
   state.filteredPokemon = [...state.allPokemon];
 
-  renderVisiblePokemon(); // Mostrar los Pokémon cargados
+  renderVisiblePokemon();
 
   state.offset += PAGE_LIMIT;
   state.loading = false;
@@ -52,7 +51,6 @@ export const preloadAllPokemon = async () => {
       list.map((p) => fetchPokemonDetails(p.url, p.name))
     );
 
-    // Evitar duplicados
     details.forEach((p) => {
       if (!state.allPokemon.some((existing) => existing.name === p.name)) {
         state.allPokemon.push(p);
